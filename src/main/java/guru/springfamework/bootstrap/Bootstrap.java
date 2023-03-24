@@ -20,29 +20,11 @@ public class Bootstrap implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Category fruits = new Category();
-        fruits.setName("Fruits");
+        loadCategoryData();
+        loadCustomerData();
+    }
 
-        Category dried = new Category();
-        dried.setName("Dried");
-
-        Category fresh = new Category();
-        fresh.setName("Fresh");
-
-        Category exotic = new Category();
-        exotic.setName("Exotic");
-
-        Category nuts = new Category();
-        nuts.setName("Name");
-
-        categoryRepository.save(fruits);
-        categoryRepository.save(dried);
-        categoryRepository.save(fresh);
-        categoryRepository.save(exotic);
-        categoryRepository.save(nuts);
-
-        System.out.println("Category Data Loaded: " + categoryRepository.count());
-
+    private void loadCustomerData() {
         Customer customer1 = new Customer();
         customer1.setFirstname("Joe");
         customer1.setLastname("Newman");
@@ -69,6 +51,31 @@ public class Bootstrap implements CommandLineRunner {
         customerRepository.save(customer4);
         customerRepository.save(customer5);
 
-        System.out.println("Customer Data Loaded: " + customerRepository.count());
+        System.out.println("Bootstrap Customer Data Loaded: " + customerRepository.count());
+    }
+
+    private void loadCategoryData() {
+        Category fruits = new Category();
+        fruits.setName("Fruits");
+
+        Category dried = new Category();
+        dried.setName("Dried");
+
+        Category fresh = new Category();
+        fresh.setName("Fresh");
+
+        Category exotic = new Category();
+        exotic.setName("Exotic");
+
+        Category nuts = new Category();
+        nuts.setName("Name");
+
+        categoryRepository.save(fruits);
+        categoryRepository.save(dried);
+        categoryRepository.save(fresh);
+        categoryRepository.save(exotic);
+        categoryRepository.save(nuts);
+
+        System.out.println("Bootstrap Category Data Loaded: " + categoryRepository.count());
     }
 }
