@@ -70,7 +70,7 @@ public class CustomerControllerTest {
     }
 
     @Test
-    public void testGetCustomerByFirstname() throws Exception {
+    public void testGetCustomerById() throws Exception {
         CustomerDTO customerDTO = new CustomerDTO();
         customerDTO.setId(ID);
         customerDTO.setFirstname(JOHN);
