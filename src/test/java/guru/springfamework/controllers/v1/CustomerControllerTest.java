@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -88,13 +89,35 @@ public class CustomerControllerTest {
         returnDTO.setLastname(customerDTO.getLastname());
         returnDTO.setCustomerUrl("/api/v1/customers/1");
 
-        when(customerService.createNewCustomer(customerDTO)).thenReturn(returnDTO);
+        when(customerService.createNewCustomer(any(CustomerDTO.class))).thenReturn(returnDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/customers/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(AbstractRestControllerTest.asJsonString(customerDTO)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstname", Matchers.equalTo("Fred")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.customer_url", Matchers.equalTo("/api/v1/customers/1")));
+    }
+
+    @Test
+    public void testUpdateCustomer() throws Exception {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname("Fred");
+        customerDTO.setLastname("Flintstone");
+
+        CustomerDTO returnDTO = new CustomerDTO();
+        returnDTO.setFirstname(customerDTO.getFirstname());
+        returnDTO.setLastname(customerDTO.getLastname());
+        returnDTO.setCustomerUrl("/api/v1/customers/1");
+
+        when(customerService.saveCustomerByDTO(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/customers/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(AbstractRestControllerTest.asJsonString(customerDTO)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstname", Matchers.equalTo("Fred")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastname", Matchers.equalTo("Flintstone")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.customer_url", Matchers.equalTo("/api/v1/customers/1")));
     }
 }
